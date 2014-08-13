@@ -43,7 +43,7 @@ void cdct(double * a_pSource, double * a_pDestination,
 		{
 			l_pSource = a_pSource;
 			result = 0.0;
-            for(y = 0; y < 8; ++y)
+			for(y = 0; y < 8; ++y)
 			{
 				for(x = 0; x < 8; ++x)
 				{

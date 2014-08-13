@@ -108,6 +108,8 @@
 		<Compiler>
 			<Add directory="C:/Program Files (x86)/VapourSynth/sdk/include" />
 		</Compiler>
+		<Unit filename="LICENSE" />
+		<Unit filename="README" />
 		<Unit filename="src/croutines.c">
 			<Option compilerVar="CC" />
 		</Unit>
