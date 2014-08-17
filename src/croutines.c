@@ -37,28 +37,48 @@ void cdct(double * a_pSource, double * a_pDestination,
 	double result;
 	ptrdiff_t u, v, x, y;
 
+	// rows
 	for(v = 0; v < 8; ++v)
 	{
 		for(u = 0; u < 8; ++u)
 		{
-			l_pSource = a_pSource;
 			result = 0.0;
-			for(y = 0; y < 8; ++y)
-			{
-				for(x = 0; x < 8; ++x)
-				{
-					result += l_pSource[x] * a_lut[x][u] * a_lut[y][v];
-				}
-				l_pSource += a_stride;
-			}
+			for(x = 0; x < 8; ++x)
+				result += l_pSource[x] * a_lut[x][u];
 			if(u == 0)
 				result *= c;
-			if(v == 0)
-				result *= c;
-			result *= 0.25;
+			result *= 0.5;
 			l_pDestination[u] = result;
 		}
+		l_pSource += a_stride;
 		l_pDestination += a_stride;
+	}
+
+	// columns
+	double temp[8];
+	l_pDestination = a_pDestination;
+	ptrdiff_t voffset;
+	for(u = 0; u < 8; ++u)
+	{
+		voffset = 0;
+		for(v = 0; v < 8; ++v)
+		{
+			temp[v] = l_pDestination[voffset];
+			voffset += a_stride;
+		}
+		voffset = 0;
+		for(v = 0; v < 8; ++v)
+		{
+			result = 0.0;
+			for(y = 0; y < 8; ++y)
+				result += temp[y] * a_lut[y][v];
+			if(v == 0)
+				result *= c;
+			result *= 0.5;
+			l_pDestination[voffset] = result;
+			voffset += a_stride;
+		}
+		l_pDestination++;
 	}
 }
 
@@ -73,33 +93,54 @@ void cidct(double * a_pSource, double * a_pDestination,
 	double result;
 	ptrdiff_t u, v, x, y;
 
-	double lut[8][8];
-	for(y = 0; y < 8; ++y)
-		for(x = 0; x < 8; ++x)
-			lut[x][y] = cos((2.0 * x + 1.0) * y * pi / 16.0);
-
+	// rows
 	for(y = 0; y < 8; ++y)
 	{
 		for(x = 0; x < 8; ++x)
 		{
-			l_pSource = a_pSource;
 			result = 0.0;
-            for(v = 0; v < 8; ++v)
+			for(u = 0; u < 8; ++u)
 			{
-				for(u = 0; u < 8; ++u)
-				{
-					item = l_pSource[u] * a_lut[x][u] * a_lut[y][v] * 0.25;
-					if(u == 0)
-						item *= c;
-					if(v == 0)
-						item *= c;
-					result += item;
-				}
-				l_pSource += a_stride;
+				item = l_pSource[u] * a_lut[x][u];
+				if(u == 0)
+					item *= c;
+				item *= 0.5;
+				result += item;
 			}
 			l_pDestination[x] = result;
 		}
+		l_pSource += a_stride;
 		l_pDestination += a_stride;
+	}
+
+	// columns
+	double temp[8];
+	l_pDestination = a_pDestination;
+	ptrdiff_t yoffset;
+	for(x = 0; x < 8; ++x)
+	{
+		yoffset = 0;
+		for(y = 0; y < 8; ++y)
+		{
+			temp[y] = l_pDestination[yoffset];
+			yoffset += a_stride;
+		}
+		yoffset = 0;
+		for(y = 0; y < 8; ++y)
+		{
+			result = 0.0;
+			for(v = 0; v < 8; ++v)
+			{
+				item = temp[v] * a_lut[y][v];
+				if(v == 0)
+					item *= c;
+				item *= 0.5;
+				result += item;
+			}
+			l_pDestination[yoffset] = result;
+			yoffset += a_stride;
+		}
+		l_pDestination++;
 	}
 }
 
