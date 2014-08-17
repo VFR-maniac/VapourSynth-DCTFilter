@@ -104,9 +104,9 @@ void cidct(double * a_pSource, double * a_pDestination,
 				item = l_pSource[u] * a_lut[x][u];
 				if(u == 0)
 					item *= c;
-				item *= 0.5;
 				result += item;
 			}
+			result *= 0.5;
 			l_pDestination[x] = result;
 		}
 		l_pSource += a_stride;
@@ -134,9 +134,9 @@ void cidct(double * a_pSource, double * a_pDestination,
 				item = temp[v] * a_lut[y][v];
 				if(v == 0)
 					item *= c;
-				item *= 0.5;
 				result += item;
 			}
+			result *= 0.5;
 			l_pDestination[yoffset] = result;
 			yoffset += a_stride;
 		}
