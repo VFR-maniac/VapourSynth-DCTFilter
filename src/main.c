@@ -82,15 +82,14 @@ static void VS_CC PluginCreate(const VSMap * a_pInMap, VSMap * a_pOutMap,
 	}
 
 	double factors[8] = {0.0};
-	ptrdiff_t i;
 	int error = 0;
-	for(i = 0; i < 8; ++i)
+	for(ptrdiff_t i = 0; i < 8; ++i)
 	{
 		factors[i] = a_cpVSAPI->propGetFloat(a_pInMap, "factors", (int)i, &error);
 		if(error)
 		{
 			char errorString[51] = {0};
-			sprintf(errorString, "dct.Filter: %d element in factors array "
+			sprintf(errorString, "dct.Filter: %td element in factors array "
 				"is not a valid real number.", i);
 			a_cpVSAPI->setError(a_pOutMap, errorString);
 			a_cpVSAPI->freeNode(internalData.pInputNode);
