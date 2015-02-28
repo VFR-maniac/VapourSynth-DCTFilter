@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <vapoursynth/VapourSynth.h>
-#include <vapoursynth/VSHelper.h> //isConstantFormat()
+#include "config.h"
+
+#include "VapourSynth.h"
+#include "VSHelper.h" //isConstantFormat()
 
 #include "declarations.h"
 
@@ -315,7 +317,8 @@ static const VSFrameRef * VS_CC PluginGetFrame(int a_frameNumber,
 VS_EXTERNAL_API(void) VapourSynthPluginInit(VSConfigPlugin a_configFunc,
 	VSRegisterFunction a_registerFunc, VSPlugin * a_pPlugin)
 {
-	a_configFunc("filter.indirect.dct", "dct", "DCT filtering plugin",
+	a_configFunc("filter.indirect.dct", "dct", "DCT filtering plugin"
+        " rev" VSDCTFILTER_REV "-" VSDCTFILTER_GIT_HASH,
 		VAPOURSYNTH_API_VERSION, 1, a_pPlugin);
 
 	a_registerFunc("Filter",
